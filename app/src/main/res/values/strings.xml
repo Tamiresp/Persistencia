@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="settings">Settings</string>
+    <string name="description_language">Description Language</string>
+    <string name="temperature">Temperature Unit</string>
+    <string name="save">Save</string>
+    <string name="f">°F</string>
+    <string name="c">°C</string>
+    <string name="english">EN</string>
+    <string name="portuguese">PT</string>
+    <string name="save_settings">Save settings</string>
+</resources>

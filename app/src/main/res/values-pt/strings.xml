@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ClimaApp</string>
+    <string name="settings">Configuracões</string>
+    <string name="description_language">Linguagem de Descricão</string>
+    <string name="temperature">Unidade de Temperatura</string>
+    <string name="save">Salvar</string>
+    <string name="f">°F</string>
+    <string name="c">°C</string>
+    <string name="english">EN</string>
+    <string name="portuguese">PT</string>
+    <string name="save_settings">Configuracões salvas</string>
+</resources>
