@@ -30,10 +30,6 @@ class MainActivity : AppCompatActivity() {
         adapter.addItem(Item())
 
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.item, null)
-
-        mDialogView.favorite.setOnClickListener {
-
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
