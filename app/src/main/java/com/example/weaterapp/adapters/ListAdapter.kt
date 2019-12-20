@@ -4,40 +4,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.weaterapp.R
+import com.example.weaterapp.requests.entity_requests.City
+import kotlinx.android.synthetic.main.item.view.*
 
-class ListAdapter(private val items: MutableList<Item>): RecyclerView.Adapter<MyViewHolder>() {
-    override fun getItemCount(): Int {
-        return items.size
+class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+
+    private var list: List<City>? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.item, parent, false)
+
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item: Item = items[position]
+    override fun getItemCount() = list?.size ?: 0
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        list?.let {
+            holder.bind(it[position])
+        }
     }
 
-    private fun deleteItem(holder: MyViewHolder, position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, itemCount)
+    fun updateData(list: List<City>?) {
+        this.list = list
+        notifyDataSetChanged()
     }
 
-    fun addItem(item: Item) {
-        items.add(item)
-        notifyItemInserted(itemCount)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(city: City) {
+            itemView.tvCity.text = "${city.name}, ${city.sys.country}"
+            itemView.tvPrevision.text = "${city.weather[0].description}"
+            itemView.tvWind.text = "wind ${city.wind.speed} m/s"
+            itemView.tvWeatherValue.text = "${city.main.temp.toInt().toString()}"
+            itemView.tvVelocity.text = "${city.main.pressure} hpa"
+            itemView.tvClouds.text = "${city.clouds.all.toInt().toString()}%"
+            if (city.weather.isNotEmpty()) {
+                Glide.with(itemView.context)
+                    .load("http://openweathermap.org/img/w/${city.weather[0].icon}.png")
+                    .into(itemView.imgWeatherIcon)
+            }
+        }
     }
-
-    private fun updateItem(holder: MyViewHolder, position: Int) {
-        items[position] = Item()
-        notifyItemChanged(position)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val viewHolder = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-        return MyViewHolder(viewHolder)
-    }
-
-}
-class MyViewHolder (itemView: View): RecyclerView.ViewHolder(itemView){
-
 
 }

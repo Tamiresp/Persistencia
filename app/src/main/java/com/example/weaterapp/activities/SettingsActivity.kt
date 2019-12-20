@@ -13,8 +13,8 @@ import com.example.weaterapp.utils.Constants.PREF
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_settings.*
 
-class SettingsActivity : AppCompatActivity() {
 
+class SettingsActivity : AppCompatActivity() {
     private val sp: SharedPreferences by lazy {
         getSharedPreferences(PREF, Context.MODE_PRIVATE)
     }
@@ -57,5 +57,6 @@ class SettingsActivity : AppCompatActivity() {
             putBoolean(ISEN, radioButtonEn.isChecked)
         }
         Snackbar.make(findViewById(R.id.settings_layout), R.string.save_settings, Snackbar.LENGTH_LONG).show()
+        finish()
     }
 }

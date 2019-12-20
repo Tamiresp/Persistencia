@@ -9,4 +9,6 @@
     <string name="english">EN</string>
     <string name="portuguese">PT</string>
     <string name="save_settings">Configuracões salvas</string>
+    <string name="no_network">Sem conexão</string>
+    <string name="search">Buscar</string>
 </resources>
