@@ -10,7 +10,7 @@
         android:id="@+id/imgWeatherIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="48sp"
+        android:textSize="44sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgWeatherIcon"
         app:layout_constraintStart_toEndOf="@+id/imgWeatherIcon"
         app:layout_constraintTop_toTopOf="@+id/imgWeatherIcon"
@@ -33,7 +33,7 @@
         android:id="@+id/tvUnit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tvWeatherValue"
         app:layout_constraintTop_toTopOf="@+id/tvWeatherValue"
         tools:text="°C" />
@@ -42,27 +42,27 @@
         android:id="@+id/ll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="2dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@id/btnFavorite"
         app:layout_constraintStart_toEndOf="@+id/tvUnit"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-        android:id="@+id/tvCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            android:id="@+id/tvCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvPrevision"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#B3B0B0"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="italic" />
 
         <LinearLayout
@@ -75,19 +75,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                tools:text="wind 1,1 c"/>
+                android:textSize="12sp"
+                tools:text="wind 1,1 c" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#B3B0B0"
+                android:layout_marginRight="2dp"
+                android:focusable="false" />
 
             <TextView
                 android:id="@+id/tvClouds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                tools:text="clouds"/>
+                android:textSize="12sp"
+                tools:text="clouds" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#B3B0B0"
+                android:layout_marginRight="2dp"
+                android:focusable="false" />
+
             <TextView
                 android:id="@+id/tvVelocity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="100 hps"/>
+                android:textSize="12sp"
+                tools:text="100 hps" />
         </LinearLayout>
     </LinearLayout>
 
@@ -95,7 +113,7 @@
         android:id="@+id/btnFavorite"
         android:layout_width="38dp"
         android:layout_height="46dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="10dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:backgroundTint="@android:color/transparent"
         android:foregroundGravity="center"
@@ -105,4 +123,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ll"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package com.example.weaterapp.requests
 
 import com.example.weaterapp.requests.endpoints.IWeatherService
-import com.example.weaterapp.utils.Constants
+import com.example.weaterapp.utils.Constants.BASEURL
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +12,7 @@ object Api {
     private val httpClient = OkHttpClient.Builder()
     private val gson = GsonBuilder().create()
     private var retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASEURL)
+        .baseUrl(BASEURL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 

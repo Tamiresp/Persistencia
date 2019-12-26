@@ -11,9 +11,9 @@ interface CityDao{
     @Delete
     fun deleteFavorite(favorite: Favorite)
 
-    @Query("SELECT * FROM TB_FAVORITE")
-    fun allFavorities(): List<Favorite>
-
     @Query("SELECT * FROM TB_FAVORITE WHERE id = :id")
-    fun favoriteById(id: Int): List<Favorite>
+    fun favoriteById(id: Int): Favorite
+
+    @Query("SELECT * FROM TB_FAVORITE")
+    fun allFavorites(): List<Favorite>
 }

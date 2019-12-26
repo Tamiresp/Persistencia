@@ -7,23 +7,25 @@ import androidx.room.RoomDatabase
 import com.example.weaterapp.requests.entity_requests.Favorite
 
 @Database(entities = [Favorite::class], version = 1)
-abstract class RoomManager : RoomDatabase(){
-    abstract fun getCityDao(): CityDao
+abstract class RoomManager : RoomDatabase() {
+
+    abstract fun getCityDao() : CityDao
 
     companion object {
-        var instance: RoomManager? = null
+        var INSTANCE : RoomManager? = null
 
         fun getInstance(context: Context) : RoomManager? {
             synchronized(RoomManager::class.java) {
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         RoomManager::class.java,
-                        "Weather.db"
-                    ).build()
+                        "Weather.db")
+//                        .allowMainThreadQueries()
+                        .build()
                 }
+                return INSTANCE
             }
-            return instance
         }
     }
 }

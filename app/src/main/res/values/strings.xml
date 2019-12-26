@@ -11,4 +11,10 @@
     <string name="save_settings">Save settings</string>
     <string name="no_network">No Conection</string>
     <string name="search">Search</string>
+    <string name="digite">Enter city name</string>
+    <string name="clouds">Clouds ${city.clouds.all.toInt().toString()}%</string>
+    <string name="no_result">No results</string>
+    <string name="error">Process error</string>
+    <string name="metric">metric</string>
+    <string name="imperial">imperial</string>
 </resources>
