@@ -29,6 +29,10 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     override fun getItemCount() = list?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val sp: SharedPreferences by lazy {
+            holder.itemView.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
+        }
+
         val view = LayoutInflater.from(holder.itemView.context).inflate(
             R.layout.item, null)
 
@@ -40,6 +44,8 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             list?.let {
                 insertDelete(view, it[position])
                 save(holder)
+                holder.itemView.btnFavorite.isChecked = sp.getBoolean(Constants.FAV, true)
+                view.btnFavorite.background = view.context.getDrawable(R.drawable.selector_back)
             }
         }
     }
@@ -51,7 +57,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         sp.edit{
             putBoolean(Constants.FAV, holder.itemView.btnFavorite.isChecked)
         }
-        holder.itemView.btnFavorite.isChecked = sp.getBoolean(Constants.FAV, true)
+
         Log.d("state", sp.getBoolean(Constants.FAV, true).toString())
     }
 
@@ -71,10 +77,6 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             view.context.getSharedPreferences(Constants.PREF, Context.MODE_PRIVATE)
         }
 
-        val spf: SharedPreferences by lazy {
-            view.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
-        }
-
         fun bind(city: City) {
             itemView.tvCity.text = "${city.name}, ${city.sys.country}"
             itemView.tvPrevision.text = city.weather[0].description
@@ -82,8 +84,6 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             itemView.tvWeatherValue.text = "${city.main.temp.toInt()}"
             itemView.tvVelocity.text = "${city.main.pressure} hpa"
             itemView.tvClouds.text = "clouds ${city.clouds.all.toInt().toString()}%"
-
-            itemView.btnFavorite.background = itemView.context.getDrawable(R.drawable.selector_back)
 
             val c = sp.getBoolean(Constants.ISC, true)
 
