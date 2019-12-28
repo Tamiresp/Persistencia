@@ -109,16 +109,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ToggleButton
         android:id="@+id/btnFavorite"
         android:layout_width="38dp"
         android:layout_height="46dp"
         android:layout_marginEnd="10dp"
-        android:background="@android:drawable/screen_background_light_transparent"
-        android:backgroundTint="@android:color/transparent"
         android:foregroundGravity="center"
-        android:src="@drawable/ic_favorite_border_black_24dp"
-        android:tint="@android:color/transparent"
+        android:background="@drawable/selector_back"
+        android:checked="false"
+        android:text=""
+        android:textOff=""
+        android:textOn=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ll"
