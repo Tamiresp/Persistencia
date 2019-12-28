@@ -61,7 +61,10 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
             }
         }
 
-        getList()
+        if (isDeviceConnected())
+            getList()
+        else
+            Snackbar.make(findViewById(R.id.main_layout), R.string.no_network, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -145,7 +148,6 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
     class InsertFavoriteAsync(context: Context, city: City) : AsyncTask<Void, Void, Boolean>() {
         private val db = RoomManager.getInstance(context)
         private var city = city
-        private var flag = false
 
         override fun doInBackground(vararg p0: Void?): Boolean {
             val favorite = Favorite(city.id, city.name)
@@ -155,13 +157,12 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
             if (idDb != favorite) {
                 db?.getCityDao()?.insertFavorite(favorite)
                 Log.d("ok", " id")
-                flag = true
             } else {
                 db?.getCityDao()?.deleteFavorite(favorite)
                 Log.d("ok", "mesmo id")
             }
 
-            return flag
+            return true
         }
     }
 

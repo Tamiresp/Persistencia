@@ -38,7 +38,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
         holder.itemView.btnFavorite.setOnClickListener {
             list?.let {
-                insert(view, it[position])
+                insertDelete(view, it[position])
                 save(holder)
             }
         }
@@ -54,7 +54,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         Log.d("state", sp.getBoolean(Constants.FAV, true).toString())
     }
 
-    private fun insert(view: View, city: City){
+    private fun insertDelete(view: View, city: City){
         MainActivity.InsertFavoriteAsync(view.context, city).execute()
         Log.d("ok", "inseriu")
     }

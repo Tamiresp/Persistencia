@@ -8,8 +8,8 @@ import retrofit2.http.Query
 interface IWeatherService {
     @GET("find?")
     fun find(@Query("q") cityName: String,
-              @Query("appid") appId: String, @Query("lang") lang: String, @Query("units") unit: String
-    ): Call<FindResult>
+              @Query("appid") appId: String, @Query("lang") lang: String,
+             @Query("units") unit: String): Call<FindResult>
 
     @GET("group?")
     fun findGroup(@Query("appid") appId: String, @Query("id") id: String): Call<FindResult>
