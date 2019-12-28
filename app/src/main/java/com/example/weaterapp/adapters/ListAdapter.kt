@@ -51,6 +51,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         sp.edit{
             putBoolean(Constants.FAV, holder.itemView.btnFavorite.isChecked)
         }
+        holder.itemView.btnFavorite.isChecked = sp.getBoolean(Constants.FAV, true)
         Log.d("state", sp.getBoolean(Constants.FAV, true).toString())
     }
 
@@ -81,8 +82,6 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             itemView.tvWeatherValue.text = "${city.main.temp.toInt()}"
             itemView.tvVelocity.text = "${city.main.pressure} hpa"
             itemView.tvClouds.text = "clouds ${city.clouds.all.toInt().toString()}%"
-
-            itemView.btnFavorite.isChecked = spf.getBoolean(Constants.FAV, true)
 
             itemView.btnFavorite.background = itemView.context.getDrawable(R.drawable.selector_back)
 
