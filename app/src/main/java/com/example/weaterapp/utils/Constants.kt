@@ -6,5 +6,7 @@ object Constants {
     const val ISC = "isC"
     const val ISEN = "isEn"
     const val API_KEY = "5f27455d0028869ce9a14e63e34a12da"
+    const val BUTTON = "BUTTON"
+    const val FAV = "FAV"
 
 }

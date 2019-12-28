@@ -46,12 +46,12 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     private fun save(holder: ViewHolder){
         val sp: SharedPreferences by lazy {
-            holder.itemView.context.getSharedPreferences("BUTTON", Context.MODE_PRIVATE)
+            holder.itemView.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
         }
         sp.edit{
-            putBoolean("FAV", holder.itemView.btnFavorite.isChecked)
+            putBoolean(Constants.FAV, holder.itemView.btnFavorite.isChecked)
         }
-        Log.d("state", sp.getBoolean("FAV", true).toString())
+        Log.d("state", sp.getBoolean(Constants.FAV, true).toString())
     }
 
     private fun insert(view: View, city: City){
@@ -71,7 +71,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         }
 
         val spf: SharedPreferences by lazy {
-            view.context.getSharedPreferences("BUTTON", Context.MODE_PRIVATE)
+            view.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
         }
 
         fun bind(city: City) {
@@ -82,9 +82,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             itemView.tvVelocity.text = "${city.main.pressure} hpa"
             itemView.tvClouds.text = "clouds ${city.clouds.all.toInt().toString()}%"
 
-            val check = spf.getBoolean("FAV", true)
-
-            itemView.btnFavorite.isChecked = check
+            itemView.btnFavorite.isChecked = spf.getBoolean(Constants.FAV, true)
 
             itemView.btnFavorite.background = itemView.context.getDrawable(R.drawable.selector_back)
 

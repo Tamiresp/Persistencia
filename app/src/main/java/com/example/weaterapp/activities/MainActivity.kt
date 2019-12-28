@@ -15,6 +15,7 @@ package com.example.weaterapp.activities
  import com.example.weaterapp.adapters.ListAdapter
  import com.example.weaterapp.data.RoomManager
  import com.example.weaterapp.requests.Api
+ import com.example.weaterapp.requests.entity_requests.City
  import com.example.weaterapp.requests.entity_requests.Favorite
  import com.example.weaterapp.requests.entity_requests.FindResult
  import com.example.weaterapp.utils.Constants
@@ -24,20 +25,20 @@ package com.example.weaterapp.activities
  import retrofit2.Call
  import retrofit2.Callback
  import retrofit2.Response
- import java.util.ArrayList
+
 
 class MainActivity : AppCompatActivity(), Callback<FindResult> {
     private lateinit var lang: String
 
     lateinit var unit: String
 
-    private val sp: SharedPreferences by lazy {
+    private var list: List<Int> = ArrayList()
+
+    val sp: SharedPreferences by lazy {
         getSharedPreferences(Constants.PREF, Context.MODE_PRIVATE)
     }
-    private val db : RoomManager? by lazy {
-        RoomManager.getInstance(this)
-    }
-    val adapter: ListAdapter by lazy {
+
+    private val adapter: ListAdapter by lazy {
         ListAdapter()
     }
 
@@ -49,11 +50,7 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        unit = getString(R.string.c)
-
         initRecyclerView()
-
-        getList()
 
         btn_busca.setOnClickListener {
             if (isDeviceConnected()){
@@ -63,6 +60,8 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
                 Snackbar.make(findViewById(R.id.main_layout), R.string.no_network, Snackbar.LENGTH_LONG).show()
             }
         }
+
+        getList()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,24 +93,6 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
         call.enqueue(this)
     }
 
-    override fun onFailure(call: Call<FindResult>, t: Throwable) {
-        Log.d("Error", "fail")
-        progressBar.visibility = View.GONE
-        Snackbar.make(findViewById(R.id.main_layout), R.string.error, Snackbar.LENGTH_LONG).show()
-    }
-
-    override fun onResponse(call: Call<FindResult>, response: Response<FindResult>) {
-        if (response.isSuccessful) {
-            adapter.updateData(response.body()?.list)
-            tv_no_result.visibility = View.GONE
-            Log.d("ok", response.toString())
-        } else if (response.body()?.list == null){
-            tv_no_result.visibility = View.VISIBLE
-            Snackbar.make(findViewById(R.id.main_layout), R.string.no_result, Snackbar.LENGTH_LONG).show()
-        }
-        progressBar.visibility = View.GONE
-    }
-
     private fun getPreferences(){
         val temp = sp.getBoolean(Constants.ISC, true)
         val lan = sp.getBoolean(Constants.ISEN, true)
@@ -131,42 +112,80 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
 
     private fun getList(){
         progressBar.visibility = View.GONE
-        ListFavoriteAsync(this).execute()
-        val list = listOf(3435910, 3445993, 3397838)
+        ListFavoriteAsync(this, this).execute()
+    }
 
+    fun setList(list: List<Int>){
+        this.list = list
+        Log.d("list", list.joinToString())
         val call = Api.getInstance()
-            .findGroup( API_KEY, list.joinToString())
+            .findGroup(API_KEY, list.joinToString())
+
         call.enqueue(this)
     }
 
-    class InsertFavoriteAsync(context: Context) : AsyncTask<Void, Void, Boolean>() {
-        val db = RoomManager.getInstance(context)
+    override fun onFailure(call: Call<FindResult>, t: Throwable) {
+        Log.d("Error", "fail")
+        progressBar.visibility = View.GONE
+        Snackbar.make(findViewById(R.id.main_layout), R.string.error, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun onResponse(call: Call<FindResult>, response: Response<FindResult>) {
+        if (response.isSuccessful) {
+            adapter.updateData(response.body()?.list)
+            tv_no_result.visibility = View.GONE
+            Log.d("ok", response.toString())
+        } else if (response.body()?.list == null){
+            tv_no_result.visibility = View.VISIBLE
+            Snackbar.make(findViewById(R.id.main_layout), R.string.no_result, Snackbar.LENGTH_LONG).show()
+        }
+        progressBar.visibility = View.GONE
+    }
+
+    class InsertFavoriteAsync(context: Context, city: City) : AsyncTask<Void, Void, Boolean>() {
+        private val db = RoomManager.getInstance(context)
+        private var city = city
+        private var flag = false
 
         override fun doInBackground(vararg p0: Void?): Boolean {
-            val id = 3682292
-            val favorite = Favorite(id, "Buenos Aires")
+            val favorite = Favorite(city.id, city.name)
 
-            val idDb = db?.getCityDao()?.favoriteById(id)
+            val idDb = db?.getCityDao()?.favoriteById(favorite.id)
 
             if (idDb != favorite) {
                 db?.getCityDao()?.insertFavorite(favorite)
                 Log.d("ok", " id")
+                flag = true
             } else {
                 db?.getCityDao()?.deleteFavorite(favorite)
                 Log.d("ok", "mesmo id")
             }
 
-            return true
+            return flag
         }
     }
 
-    class ListFavoriteAsync(context: Context) : AsyncTask<Void, Void, ArrayList<Favorite>>() {
-        val db = RoomManager.getInstance(context)
+    class ListFavoriteAsync(context: Context, activity: MainActivity?) : AsyncTask<Void, Void, List<Int>>() {
+        private val db = RoomManager.getInstance(context)
 
-        override fun doInBackground(vararg p0: Void?): ArrayList<Favorite>? {
-            val result = db?.getCityDao()?.allFavorites()
-            Log.d("db", result.toString())
-            return result as ArrayList<Favorite>?
+       var list = ArrayList<Int>()
+
+        private var activity = activity
+
+        override fun doInBackground(vararg p0: Void?): List<Int> {
+            val result = db?.getCityDao()?.allFavorites()!!
+
+            if (result != null) {
+                for (x in result.indices) {
+                    list.add(result[x])
+                }
+            }
+            return list
+        }
+
+        override fun onPostExecute(result: List<Int>?) {
+            super.onPostExecute(result)
+            activity?.setList(list)
         }
     }
 }
