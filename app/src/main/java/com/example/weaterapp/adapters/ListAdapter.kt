@@ -2,15 +2,16 @@ package com.example.weaterapp.adapters
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weaterapp.R
 import com.example.weaterapp.activities.MainActivity
+import com.example.weaterapp.data.RoomManager
 import com.example.weaterapp.requests.entity_requests.City
 import com.example.weaterapp.utils.Constants
 import kotlinx.android.synthetic.main.item.view.*
@@ -29,10 +30,6 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     override fun getItemCount() = list?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val sp: SharedPreferences by lazy {
-            holder.itemView.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
-        }
-
         val view = LayoutInflater.from(holder.itemView.context).inflate(
             R.layout.item, null)
 
@@ -43,22 +40,8 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         holder.itemView.btnFavorite.setOnClickListener {
             list?.let {
                 insertDelete(view, it[position])
-                save(holder)
-                holder.itemView.btnFavorite.isChecked = sp.getBoolean(Constants.FAV, true)
-                view.btnFavorite.background = view.context.getDrawable(R.drawable.selector_back)
             }
         }
-    }
-
-    private fun save(holder: ViewHolder){
-        val sp: SharedPreferences by lazy {
-            holder.itemView.context.getSharedPreferences(Constants.BUTTON, Context.MODE_PRIVATE)
-        }
-        sp.edit{
-            putBoolean(Constants.FAV, holder.itemView.btnFavorite.isChecked)
-        }
-
-        Log.d("state", sp.getBoolean(Constants.FAV, true).toString())
     }
 
     private fun insertDelete(view: View, city: City){
@@ -73,7 +56,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val sp: SharedPreferences by lazy {
+        private val sp: SharedPreferences by lazy {
             view.context.getSharedPreferences(Constants.PREF, Context.MODE_PRIVATE)
         }
 
@@ -84,6 +67,12 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             itemView.tvWeatherValue.text = "${city.main.temp.toInt()}"
             itemView.tvVelocity.text = "${city.main.pressure} hpa"
             itemView.tvClouds.text = "clouds ${city.clouds.all.toInt().toString()}%"
+
+            itemView.btnFavorite.background = itemView.context.getDrawable(R.drawable.selector_back)
+
+            val favorite = FindFavoriteById(itemView.context, city.id).execute().get()
+
+            itemView.btnFavorite.isChecked = favorite
 
             val c = sp.getBoolean(Constants.ISC, true)
 
@@ -100,4 +89,14 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         }
     }
 
+    class FindFavoriteById(context: Context, city: Int): AsyncTask<Void, Void, Boolean>(){
+        private var city = city
+
+        private val db = RoomManager.getInstance(context)
+
+        override fun doInBackground(vararg params: Void?): Boolean {
+            var city = db?.getCityDao()?.favoriteById(city)
+            return city != null
+        }
+    }
 }

@@ -176,9 +176,9 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
                 Log.d("ok", " id")
             } else {
                 db?.getCityDao()?.deleteFavorite(favorite)
+
                 Log.d("ok", "mesmo id")
             }
-
             return true
         }
     }
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
     class ListFavoriteAsync(context: Context, activity: MainActivity?) : AsyncTask<Void, Void, List<Int>>() {
         private val db = RoomManager.getInstance(context)
 
-       var list = ArrayList<Int>()
+        private var list = ArrayList<Int>()
 
         private var activity = activity
 
