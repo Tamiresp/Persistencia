@@ -6,6 +6,8 @@ package com.example.weaterapp.activities
  import android.net.ConnectivityManager
  import android.os.AsyncTask
  import android.os.Bundle
+ import android.text.Editable
+ import android.text.TextWatcher
  import android.util.Log
  import android.view.Menu
  import android.view.MenuItem
@@ -61,10 +63,24 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
             }
         }
 
-        if (isDeviceConnected())
-            getList()
-        else
-            Snackbar.make(findViewById(R.id.main_layout), R.string.no_network, Snackbar.LENGTH_LONG).show()
+        city_edit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(city_edit.text.toString().isEmpty()){
+                    if (isDeviceConnected())
+                        getList()
+                    else
+                        Snackbar.make(findViewById(R.id.main_layout), R.string.no_network, Snackbar.LENGTH_LONG).show()
+                }
+            }
+        })
+        getList()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -114,15 +130,14 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
     }
 
     private fun getList(){
-        progressBar.visibility = View.GONE
         ListFavoriteAsync(this, this).execute()
     }
 
     fun setList(list: List<Int>){
         this.list = list
-        Log.d("list", list.joinToString())
+        progressBar.visibility = View.VISIBLE
         val call = Api.getInstance()
-            .findGroup(API_KEY, list.joinToString())
+            .findGroup(list.joinToString(separator= ","), API_KEY)
 
         call.enqueue(this)
     }
