@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
+
         if (isDeviceConnected())
             getList()
         else
@@ -136,10 +137,11 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
     }
 
     fun setList(list: List<Int>){
+        getPreferences()
         this.list = list
         progressBar.visibility = View.VISIBLE
         val call = Api.getInstance()
-            .findGroup(list.joinToString(separator= ","), API_KEY)
+            .findGroup(list.joinToString(separator= ","), API_KEY, lang, unit)
 
         call.enqueue(this)
     }
@@ -182,6 +184,17 @@ class MainActivity : AppCompatActivity(), Callback<FindResult> {
             return true
         }
     }
+
+    class DeleteFavorite(context: Context, city: City) : AsyncTask<Void, Void, Boolean>(){
+        private val db = RoomManager.getInstance(context)
+        private var city = city
+        override fun doInBackground(vararg params: Void?): Boolean {
+            val favorite = Favorite(city.id,city.name)
+            db?.getCityDao()?.deleteFavorite(favorite)
+            return true
+        }
+    }
+
 
     class ListFavoriteAsync(context: Context, activity: MainActivity?) : AsyncTask<Void, Void, List<Int>>() {
         private val db = RoomManager.getInstance(context)

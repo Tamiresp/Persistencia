@@ -49,6 +49,10 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         Log.d("ok", "inseriu")
     }
 
+    private fun delete(view: View, city: City){
+        MainActivity.DeleteFavorite(view.context, city)
+        Log.d("ok", "deleted")
+    }
 
     fun updateData(list: List<City>?) {
         this.list = list
@@ -66,7 +70,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
             itemView.tvWind.text = "wind ${city.wind.speed} m/s"
             itemView.tvWeatherValue.text = "${city.main.temp.toInt()}"
             itemView.tvVelocity.text = "${city.main.pressure} hpa"
-            itemView.tvClouds.text = "clouds ${city.clouds.all.toInt().toString()}%"
+            itemView.tvClouds.text = "clouds ${city.clouds.all.toInt()}%"
 
             itemView.btnFavorite.background = itemView.context.getDrawable(R.drawable.selector_back)
 

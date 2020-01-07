@@ -12,5 +12,7 @@ interface IWeatherService {
              @Query("units") unit: String): Call<FindResult>
 
     @GET("group?")
-    fun findGroup(@Query("id") id: String, @Query("appid") appId: String): Call<FindResult>
+    fun findGroup(@Query("id") id: String, @Query("appid") appId: String,
+                  @Query("lang") lang: String,
+                  @Query("units") unit: String): Call<FindResult>
 }
